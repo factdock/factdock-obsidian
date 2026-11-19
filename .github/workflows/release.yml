@@ -1,0 +1,25 @@
+# Builds the plugin and attaches main.js, manifest.json and styles.css to a GitHub release
+# whenever a version tag (for example 1.0.0) is pushed. Obsidian installs from these files.
+name: Release
+on:
+  push:
+    tags:
+      - "*"
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20.x"
+      - run: npm ci
+      - run: npm run build
+      - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          tag="${GITHUB_REF#refs/tags/}"
+          gh release create "$tag" --title="$tag" --notes "Factdock for Obsidian $tag" main.js manifest.json styles.css
