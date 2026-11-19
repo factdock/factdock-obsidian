@@ -106,8 +106,8 @@ function str(v: unknown): string { return typeof v === "string" ? v.trim() : typ
 function toItems(data: unknown): ResultItem[] {
   const d = (data ?? {}) as Record<string, unknown>;
   const list = [
-    ...(Array.isArray(d.results) ? d.results : []),
-    ...(Array.isArray(d.lite_results) ? d.lite_results : []),
+    ...(Array.isArray(d.results) ? (d.results as unknown[]) : []),
+    ...(Array.isArray(d.lite_results) ? (d.lite_results as unknown[]) : []),
   ] as Array<Record<string, unknown>>;
   const seen = new Set<string>();
   const out: ResultItem[] = [];
@@ -159,8 +159,9 @@ export default class FactdockPlugin extends Plugin {
   lastRun: SearchRun | null = null;
   busy = false;
 
-  async onload() {
-    this.settings = { ...DEFAULTS, ...(await this.loadData()) };
+  async onload(): Promise<void> {
+    const saved = (await this.loadData()) as Partial<FactdockSettings> | null;
+    this.settings = { ...DEFAULTS, ...(saved ?? {}) };
     if (!this.settings.lang) this.settings.lang = defaultLang();
     this.registerView(VIEW_TYPE, (leaf) => new ResultsView(leaf, this));
     this.addRibbonIcon("search", t("ribbonSearch"), () => this.openSearch());
@@ -314,20 +315,20 @@ class SearchModal extends Modal {
         const names = COUNTRIES.map((c) => ({ c, n: zoneLabel(`cc_${c}`, this.lang) }))
           .sort((a, b) => a.n.localeCompare(b.n, this.lang));
         for (const { c, n } of names) dd.addOption(`cc_${c}`, n);
-        dd.setValue(this.zone).onChange((v) => { this.zone = v; this.loadPrice(); });
+        dd.setValue(this.zone).onChange((v) => { this.zone = v; void this.loadPrice(); });
       });
     }
     new Setting(contentEl).setName(t("lang")).setDesc(t("langDesc")).addDropdown((dd) => {
       for (const l of LANGS) dd.addOption(l, langLabel(l, this.lang));
-      dd.setValue(this.lang).onChange((v) => { this.lang = v; this.loadPrice(); });
+      dd.setValue(this.lang).onChange((v) => { this.lang = v; void this.loadPrice(); });
     });
 
     this.priceEl = contentEl.createDiv({ cls: "factdock-price" });
     const row = contentEl.createDiv({ cls: "factdock-buttons" });
     row.createEl("button", { text: t("cancel") }).onclick = () => this.close();
     this.goBtn = row.createEl("button", { cls: "mod-cta", text: t("search") });
-    this.goBtn.onclick = () => this.submit();
-    this.loadPrice();
+    this.goBtn.onclick = () => void this.submit();
+    void this.loadPrice();
   }
 
   private redraw() { this.contentEl.empty(); this.onOpen(); }

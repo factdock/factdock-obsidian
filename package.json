@@ -1,6 +1,6 @@
 {
   "name": "obsidian-factdock",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "private": true,
   "description": "Factdock for Obsidian",
   "main": "main.js",
@@ -11,9 +11,8 @@
   "license": "MIT",
   "devDependencies": {
     "@types/node": "^20.11.0",
-    "builtin-modules": "^3.3.0",
     "esbuild": "0.20.2",
-    "obsidian": "1.5.7",
+    "obsidian": "1.14.4",
     "tslib": "2.6.2",
     "typescript": "5.4.5"
   }
