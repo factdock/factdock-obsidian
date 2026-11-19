@@ -1,6 +1,6 @@
 {
   "name": "obsidian-factdock",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "private": true,
   "description": "Factdock for Obsidian",
   "main": "main.js",

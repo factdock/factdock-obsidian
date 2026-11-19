@@ -1,8 +1,8 @@
 {
   "id": "factdock",
   "name": "Factdock",
-  "version": "1.0.2",
-  "minAppVersion": "1.5.0",
+  "version": "1.0.3",
+  "minAppVersion": "1.8.7",
   "description": "Search primary sources on any country's web in your own language, and save each result with its source into your notes. Requires a paid Factdock account.",
   "author": "Apia Business Affairs Co., Ltd.",
   "authorUrl": "https://fact-dock.com",

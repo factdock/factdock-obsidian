@@ -186,7 +186,7 @@ export default class FactdockPlugin extends Plugin {
     const existing = this.app.workspace.getLeavesOfType(VIEW_TYPE)[0];
     const leaf = existing ?? this.app.workspace.getRightLeaf(false)!;
     if (!existing) await leaf.setViewState({ type: VIEW_TYPE, active: true });
-    this.app.workspace.revealLeaf(leaf);
+    await this.app.workspace.revealLeaf(leaf);
     return leaf.view as ResultsView;
   }
 
