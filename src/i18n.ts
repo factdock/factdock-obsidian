@@ -55,7 +55,7 @@ const ALIASES: Record<string, string> = {
 export function obsidianLanguage(): string {
   const api = obsidian as unknown as { getLanguage?: () => string; moment?: { locale: () => string } };
   try { if (typeof api.getLanguage === "function") return api.getLanguage() || "en"; } catch { /* fall back */ }
-  return window.localStorage.getItem("language") || api.moment?.locale() || "en";
+  return api.moment?.locale() || "en";
 }
 
 function uiLang(): string {
